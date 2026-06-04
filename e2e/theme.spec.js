@@ -57,17 +57,19 @@ test("theme toggle switches between dark and light mode", async ({ page }) => {
   await page.goto("/dashboard");
 
   // The DashboardHeader provides the ThemeToggle on the dashboard
-  const themeToggle = page.getByRole("button", { name: "Toggle theme" }).first();
-  await expect(themeToggle).toBeVisible();
+  const select = page.getByRole("combobox", { name: "Select dashboard theme" }).first();
+  await expect(select).toBeVisible();
 
-  const initialPressed = await themeToggle.getAttribute("aria-pressed");
+  // Initial theme should have class 'dark'
+  await expect(page.locator("html")).toHaveClass(/dark/);
 
-  await themeToggle.click({ force: true });
+  // Switch to a light theme
+  await select.selectOption("modern-light-blue");
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
 
-  await expect(themeToggle).toHaveAttribute(
-    "aria-pressed",
-    initialPressed === "true" ? "false" : "true"
-  );
+  // Switch to another dark theme
+  await select.selectOption("nordic-frost");
+  await expect(page.locator("html")).toHaveClass(/dark/);
 });
 
 /**
@@ -90,20 +92,13 @@ test("public profile page theme toggle works without authentication", async ({
   await expect(page).toHaveURL(/\/u\//);
 
   // ThemeToggle must be present in the AppNavbar and functional without login
-  const themeToggle = page.getByRole("banner").getByRole("button", { name: "Toggle theme" });
-  await expect(themeToggle).toBeVisible({ timeout: 10000 });
+  const select = page.getByRole("banner").getByRole("combobox", { name: "Select dashboard theme" });
+  await expect(select).toBeVisible({ timeout: 10000 });
 
-  const initialPressed = await themeToggle.getAttribute("aria-pressed");
-
-  await themeToggle.click();
-
-  // Toggle state must have flipped
-  await expect(themeToggle).toHaveAttribute(
-    "aria-pressed",
-    initialPressed === "true" ? "false" : "true"
-  );
+  // Select a theme
+  await select.selectOption("modern-light-blue");
 
   // Theme preference must be persisted to localStorage
   const stored = await page.evaluate(() => localStorage.getItem("theme"));
-  expect(stored === "dark" || stored === "light").toBe(true);
+  expect(stored).toBe("modern-light-blue");
 });
