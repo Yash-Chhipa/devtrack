@@ -153,6 +153,10 @@ test.beforeEach(async ({ page }) => {
     });
   });
 
+  await page.route("**/api/notifications**", async (route) => {
+    await route.fulfill({ contentType: "application/json", body: JSON.stringify({ notifications: [], unreadCount: 0 }) });
+  });
+
   await page.route("**/api/user/github-accounts", async (route) => {
     await route.fulfill({
       contentType: "application/json",
@@ -255,12 +259,28 @@ test.beforeEach(async ({ page }) => {
     });
   }
 
+  await page.route("**/api/streak/freeze**", async (route) => {
+    await route.fulfill({ contentType: "application/json", body: JSON.stringify({ hasFreeze: false, freezeDate: null }) });
+  });
+
   await page.route("**/api/stream**", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "text/event-stream",
       body: "data: {}\n\n",
     });
+  });
+
+  await page.route("**/api/user/dashboard-layout**", async (route) => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({ contentType: "application/json", body: JSON.stringify({ layout: null }) });
+    } else {
+      await route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true }) });
+    }
+  });
+
+  await page.route("**/api/daily-note**", async (route) => {
+    await route.fulfill({ contentType: "application/json", body: JSON.stringify({ note: null }) });
   });
 });
 
