@@ -106,9 +106,19 @@ async function setupStreakMocks(page: import("@playwright/test").Page) {
     })
   );
 
+  await page.route("**/api/metrics/contributions**", (route) =>
+    route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        days: 10,
+        total: 100,
+        data: { "2026-05-18": 5 },
+      }),
+    })
+  );
+
   // ── Stub remaining metrics ───────────────────────────────────────────────
   const stubs = [
-    "**/api/metrics/contributions**",
     "**/api/metrics/prs**",
     "**/api/metrics/pr-breakdown**",
     "**/api/metrics/pr-review-trend**",
@@ -169,7 +179,8 @@ test("[Streak E2E] streak widget shows the mocked current streak value", async (
   ).toBeVisible({ timeout: 30_000 });
 
   // The mock returns current: 12 — this digit must appear in the streak area.
-  await expect(page.getByText(/12/).first()).toBeVisible({ timeout: 10_000 });
+  // Use exact match to avoid matching "Jun 12" in the contribution calendar tooltips
+  await expect(page.getByText("12", { exact: true }).first()).toBeVisible({ timeout: 10_000 });
 });
 
 test("[Streak E2E] streak widget shows the mocked longest streak value", async ({

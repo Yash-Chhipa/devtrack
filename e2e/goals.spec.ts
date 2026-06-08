@@ -119,6 +119,7 @@ async function setupGoalsMocks(page: import("@playwright/test").Page) {
 }
 
 test("[Goals E2E] goals widget renders on dashboard", async ({ page }) => {
+  page.on("console", msg => console.log("BROWSER CONSOLE:", msg.text()));
   await setupGoalsMocks(page);
 
   await page.route("**/api/goals**", (route) => {
@@ -292,5 +293,5 @@ test("[Goals E2E] deleting a goal removes it from the list", async ({
   await goalRow.getByRole("button", { name: /delete|remove/i }).click();
 
   // Goal should be gone.
-  await expect(page.getByText("Goal to Delete")).not.toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText("Goal to Delete", { exact: true })).not.toBeVisible({ timeout: 10_000 });
 });

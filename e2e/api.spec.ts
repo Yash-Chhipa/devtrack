@@ -86,6 +86,8 @@ test("[API E2E] /api/metrics/contributions returns 200 with valid session cookie
   );
 
   // Use the same browser context's fetch so the cookie is sent.
+  // We must hit the origin first so page.evaluate doesn't run in about:blank context
+  await page.goto("/");
   const res = await page.evaluate(async () => {
     const r = await fetch("/api/metrics/contributions?days=7");
     return { status: r.status, ok: r.ok };
@@ -146,6 +148,7 @@ test("[API E2E] /api/metrics/contributions with days param returns valid JSON wh
     })
   );
 
+  await page.goto("/");
   const result = await page.evaluate(async () => {
     const r = await fetch("/api/metrics/contributions?days=30");
     const body = await r.json();
