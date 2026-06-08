@@ -1127,20 +1127,20 @@ function SettingsPageContent() {
                       <button
                         type="button"
                         onClick={() => handleMovePin(index, "up")}
-                        disabled={index === 0}
+                        disabled={index === 0 || saving}
                         title="Move Up"
                         aria-label={`Move ${repoName} up`}
-                        className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--control-hover)] text-[var(--card-foreground)] disabled:opacity-40"
+                        className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--control-hover)] text-[var(--card-foreground)] disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         ↑
                       </button>
                       <button
                         type="button"
                         onClick={() => handleMovePin(index, "down")}
-                        disabled={index === (settings.pinned_repos || []).length - 1}
+                        disabled={index === (settings.pinned_repos || []).length - 1 || saving}
                         title="Move Down"
                         aria-label={`Move ${repoName} down`}
-                        className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--control-hover)] text-[var(--card-foreground)] disabled:opacity-40"
+                        className="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--control-hover)] text-[var(--card-foreground)] disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         ↓
                       </button>
@@ -1149,8 +1149,9 @@ function SettingsPageContent() {
                       <button
                         type="button"
                         onClick={() => handleUnpinRepo(repoName)}
+                        disabled={saving}
                         aria-label={`Unpin ${repoName}`}
-                        className="ml-2 rounded-lg border border-[var(--destructive-muted-border)] hover:bg-[var(--destructive-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--destructive)]"
+                        className="ml-2 rounded-lg border border-[var(--destructive-muted-border)] hover:bg-[var(--destructive-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--destructive)] disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Unpin
                       </button>
@@ -1171,9 +1172,10 @@ function SettingsPageContent() {
                 type="text"
                 value={repoSearchQuery}
                 onChange={(e) => setRepoSearchQuery(e.target.value)}
+                disabled={saving}
                 placeholder="Type to search your repositories..."
                 aria-label="Search repositories to pin"
-                className="w-full rounded-lg border border-[var(--border)] bg-[var(--control)] px-4 py-2 text-sm text-[var(--card-foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] mb-4"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--control)] px-4 py-2 text-sm text-[var(--card-foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
               />
 
               {loadingRepos ? (
@@ -1200,8 +1202,9 @@ function SettingsPageContent() {
                         <button
                           type="button"
                           onClick={() => handlePinRepo(repoName)}
+                          disabled={saving}
                           aria-label={`Pin ${repoName}`}
-                          className="rounded-lg bg-[var(--accent)] text-[var(--accent-foreground)] px-3 py-1 text-xs font-semibold hover:opacity-90 transition-opacity"
+                          className="rounded-lg bg-[var(--accent)] text-[var(--accent-foreground)] px-3 py-1 text-xs font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Pin
                         </button>

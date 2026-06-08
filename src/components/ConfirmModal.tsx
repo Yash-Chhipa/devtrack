@@ -10,6 +10,7 @@ interface ConfirmModalProps {
   cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
+  disabled?: boolean;
 }
 
 export default function ConfirmModal({
@@ -20,6 +21,7 @@ export default function ConfirmModal({
   cancelLabel = "Cancel",
   onConfirm,
   onCancel,
+  disabled = false,
 }: ConfirmModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +29,7 @@ export default function ConfirmModal({
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !disabled) {
         onCancel();
       }
     };
@@ -40,7 +42,7 @@ export default function ConfirmModal({
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onCancel]);
+  }, [isOpen, onCancel, disabled]);
 
   if (!isOpen) return null;
 
@@ -49,7 +51,7 @@ export default function ConfirmModal({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
-        onClick={onCancel}
+        onClick={disabled ? undefined : onCancel}
         aria-hidden="true"
       />
       
@@ -73,14 +75,16 @@ export default function ConfirmModal({
           <button
             type="button"
             onClick={onCancel}
-            className="w-full sm:w-auto rounded-xl border border-[var(--border)] bg-[var(--control)] px-5 py-2.5 text-sm font-semibold text-[var(--card-foreground)] transition-all hover:bg-[var(--card-muted)] active:scale-95"
+            disabled={disabled}
+            className="w-full sm:w-auto rounded-xl border border-[var(--border)] bg-[var(--control)] px-5 py-2.5 text-sm font-semibold text-[var(--card-foreground)] transition-all hover:bg-[var(--card-muted)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="w-full sm:w-auto rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-[var(--accent)]/20"
+            disabled={disabled}
+            className="w-full sm:w-auto rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-[var(--accent)]/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           >
             {confirmLabel}
           </button>

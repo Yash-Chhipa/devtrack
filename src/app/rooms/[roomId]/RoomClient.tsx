@@ -22,6 +22,7 @@ export default function RoomClient({
   const router = useRouter();
   const [messages, setMessages] = useState<RoomMessage[]>(initialMessages);
   const [members, setMembers] = useState<RoomMember[]>(initialMembers);
+  const [deleting, setDeleting] = useState(false);
 
   function handleSent(msg: RoomMessage) {
     setMessages((prev) => [...prev, msg]);
@@ -42,12 +43,20 @@ export default function RoomClient({
 
   async function handleDeleteRoom() {
     if (!confirm('Are you sure you want to delete this room? This cannot be undone.')) return;
-    const res = await fetch(`/api/rooms/${room.id}`, { method: 'DELETE' });
-    if (res.ok) {
-      router.push('/rooms');
-    } else {
-      const data = await res.json();
-      alert(data.error ?? 'Failed to delete room');
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/rooms/${room.id}`, { method: 'DELETE' });
+      if (res.ok) {
+        router.push('/rooms');
+      } else {
+        const data = await res.json();
+        alert(data.error ?? 'Failed to delete room');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Failed to delete room. Please check your connection.');
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -75,9 +84,10 @@ export default function RoomClient({
         {room.is_owner && (
           <button
             onClick={handleDeleteRoom}
-            className="text-xs px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            disabled={deleting}
+            className="text-xs px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Delete Room
+            {deleting ? 'Deleting...' : 'Delete Room'}
           </button>
         )}
       </header>
