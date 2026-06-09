@@ -281,7 +281,6 @@ describe("User Settings API Endpoints", () => {
         preferred_locale: "en",
       });
       
-      // Verify update database query was called with the updates object
       expect(mockUpdate).toHaveBeenCalledWith({
         is_public: false,
         public_since: null,
