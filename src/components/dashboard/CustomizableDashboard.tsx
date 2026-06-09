@@ -202,6 +202,11 @@ const ProductiveHoursWidget = dynamic(
   { ssr: false, loading: () => <ChartSkeleton /> },
 );
 
+const AchievementProgressTracker = dynamic(
+  () => import("@/components/AchievementProgressTracker"),
+  { ssr: false, loading: () => <SkeletonCard /> },
+);
+
 const SECTION_ANCHOR_IDS: Record<DashboardSectionId, string> = {
   overview: "overview",
   activity: "streaks",

@@ -137,7 +137,7 @@ export const DEFAULT_DASHBOARD_LAYOUT: DashboardLayoutPreference = {
       "achievement-progress",
     ],
   },
-  hidden: [],
+  hidden: ["achievement-tracker"],
 };
 
 const ALL_WIDGET_IDS = new Set<DashboardWidgetId>(

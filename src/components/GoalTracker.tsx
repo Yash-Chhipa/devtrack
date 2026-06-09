@@ -418,12 +418,13 @@ export default function GoalTracker() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-[var(--card-foreground)]">Goals</h2>
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           onClick={handleSync}
           disabled={syncing}
           title="Refresh commit-based goals from GitHub"
           aria-label="Refresh commit goals"
-          className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] px-2.5 py-1 text-xs text-[var(--muted-foreground)] transition hover:text-[var(--card-foreground)] hover:border-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -439,7 +440,7 @@ export default function GoalTracker() {
             />
           </svg>
           {syncing ? "Syncing…" : "Refresh"}
-        </button>
+        </Button>
       </div>
 
       {/* Sync Error */}
@@ -578,7 +579,9 @@ export default function GoalTracker() {
                     </span>
 
                     {!isAutoSynced && (
-                      <button
+                      <Button
+                        variant="default"
+                        size="sm"
                         onClick={async () => {
                           const newCurrent = goal.current + 1;
                           if (newCurrent > goal.target) return;
@@ -597,17 +600,15 @@ export default function GoalTracker() {
                         }}
                         disabled={goal.current >= goal.target}
                         aria-label={`Increment "${goal.title}" progress by 1`}
-                        className="rounded bg-blue-600 px-2 py-1 text-xs text-white hover:bg-blue-700 disabled:opacity-50"
                       >
                         +1
-                      </button>
+                      </Button>
                     )}
 
                     <button
                       type="button"
                       onClick={() => setConfirmingId(goal.id)}
                       disabled={isDeleting}
-                      className="text-[var(--muted-foreground)] hover:text-[var(--destructive)] transition-colors disabled:opacity-50"
                       aria-label={`Delete goal: ${goal.title}`}
                       title="Delete goal"
                     >
@@ -624,7 +625,7 @@ export default function GoalTracker() {
                           clipRule="evenodd"
                         />
                       </svg>
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -804,10 +805,9 @@ export default function GoalTracker() {
           </p>
         )}
 
-        <button
+        <Button
           type="submit"
           disabled={creating || !title.trim()}
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--accent-foreground)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {creating ? (
             <>
@@ -817,7 +817,7 @@ export default function GoalTracker() {
           ) : (
             "Create goal"
           )}
-        </button>
+        </Button>
         {createError && (
           <p className="text-sm text-[var(--destructive)]">{createError}</p>
         )}
