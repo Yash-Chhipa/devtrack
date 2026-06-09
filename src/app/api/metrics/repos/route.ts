@@ -309,24 +309,24 @@ export async function GET(req: NextRequest) {
   }
 
   // accountId is a different linked account — look up its token from Supabase.
-  const accountToken = await getAccountToken(userRow.id, accountId);
-
-  if (!accountToken) {
-    return Response.json({ error: "Account not found" }, { status: 404 });
-  }
-
-  const { data: accountRow } = await supabaseAdmin
-    .from("user_github_accounts")
-    .select("github_login")
-    .eq("user_id", userRow.id)
-    .eq("github_id", accountId)
-    .single();
-
-  if (!accountRow?.github_login) {
-    return Response.json({ error: "Account not found" }, { status: 404 });
-  }
-
   try {
+    const accountToken = await getAccountToken(userRow.id, accountId);
+
+    if (!accountToken) {
+      return Response.json({ error: "Account not found" }, { status: 404 });
+    }
+
+    const { data: accountRow } = await supabaseAdmin
+      .from("user_github_accounts")
+      .select("github_login")
+      .eq("user_id", userRow.id)
+      .eq("github_id", accountId)
+      .single();
+
+    if (!accountRow?.github_login) {
+      return Response.json({ error: "Account not found" }, { status: 404 });
+    }
+
     const result = await fetchReposForAccount(
       accountToken,
       accountRow.github_login,
