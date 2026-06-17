@@ -1,4 +1,5 @@
-﻿import LazyWidget from "@/components/LazyWidget";
+﻿import dynamic from "next/dynamic";
+import LazyWidget from "@/components/LazyWidget";
 import DiscussionsWidget from "@/components/DiscussionsWidget";
 import CommunityMetrics from "@/components/CommunityMetrics";
 import GoalTracker from "@/components/GoalTracker";
@@ -16,6 +17,11 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import DashboardSSEProvider from "@/components/DashboardSSEProvider";
+import StreakTracker from "@/components/StreakTracker";
+import RepoAnalyticsExplorer from "@/components/repo-analytics/RepoAnalyticsExplorer";
+import PinnedReposWidget from "@/components/PinnedReposWidget";
+import TopRepos from "@/components/TopRepos";
+import InactiveRepositoriesCard from "@/components/InactiveRepositoriesCard";
 
 const SkeletonCard = () => (
   <div
