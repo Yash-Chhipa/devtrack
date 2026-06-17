@@ -16,6 +16,7 @@ function isActivePath(pathname: string, href: string) {
     const [base] = href.split("#");
     return pathname === base;
   }
+  if (href === "/dashboard") return pathname === "/dashboard";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -42,10 +43,11 @@ export default function AppNavbar() {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+  const fn = () => setScrolled(window.scrollY > 20);
+  fn();
+  window.addEventListener("scroll", fn, { passive: true });
+  return () => window.removeEventListener("scroll", fn);
+}, [pathname]);
 
   const isAuthenticated = status === "authenticated" && Boolean(session);
   const isDashboardRoute = pathname.startsWith("/dashboard");
