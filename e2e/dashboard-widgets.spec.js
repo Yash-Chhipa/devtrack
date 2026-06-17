@@ -210,7 +210,7 @@ test("dashboard widgets render with mocked metrics", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Your Commits" })).toBeVisible(
     { timeout: 10000 }
   );
-  await expect(page.getByRole("heading", { name: "PR Analytics" })).toBeVisible(
+  await expect(page.getByRole("heading", { name: "PR Analytics" }).first()).toBeVisible(
     { timeout: 10000 }
   );
   await expect(
