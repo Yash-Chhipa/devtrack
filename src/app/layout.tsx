@@ -107,11 +107,10 @@ export default async function RootLayout({
               <Providers>
                 <AppNavbar />
                 {children}
+                <Footer />
               </Providers>
             </NextIntlClientProvider>
           </div>
-
-          <Footer />
 
           <Toaster richColors position="top-right" />
         </div>
