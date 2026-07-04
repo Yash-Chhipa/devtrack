@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { normalizeOgUserParams } from "@/lib/og-user-params";
-import Image from "next/image";
 
 export const runtime = "edge";
 
